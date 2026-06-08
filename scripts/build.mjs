@@ -11,7 +11,7 @@ const site = {
     "Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.",
 }
 
-const assetVersion = "20260608-favicon-v1"
+const assetVersion = "20260608-responsive-v1"
 
 const scripts = [
   clone("deriv", "Deriv", "opções, multipliers, CFDs e índices sintéticos", [
