@@ -607,10 +607,10 @@ function clone(slug, name, market, angles) {
 }
 
 function renderPage({ locale = "pt", title, description, pathName, body, schema, preloadHero = false }) {
-  const canonical = `${site.domain}${pathName}`
+  const canonical = absoluteUrl(pathName)
   const isClonePage = pathName.includes("/clone-scripts/")
   const heroImage = isClonePage ? "assets/clone-script-hero-visual.png" : "assets/hero-ecosystem.webp"
-  const imageUrl = `${site.domain}/${heroImage}`
+  const imageUrl = absoluteUrl(`/${heroImage}`)
   const lang = locale === "en" ? "en" : "pt-BR"
 
   return `<!doctype html>
@@ -1437,18 +1437,42 @@ function renderPageSnapshot(script, locale = "pt") {
 
 function homeSchema(locale = "pt") {
   const isEn = locale === "en"
+  const pagePath = isEn ? "/en/" : "/"
+  const pageUrl = absoluteUrl(pagePath)
+  const websiteId = `${site.domain}/#website`
+  const organizationId = `${site.domain}/#organization`
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
+        "@id": organizationId,
         name: site.name,
         url: site.domain,
         description: isEn ? site.descriptionEn : site.description,
         email: site.email,
       },
       {
+        "@type": "WebSite",
+        "@id": websiteId,
+        name: site.name,
+        url: site.domain,
+        inLanguage: isEn ? "en" : "pt-BR",
+        publisher: { "@id": organizationId },
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: isEn ? "Arcos Online clone scripts and white-label brokerage software" : "Arcos Online clone scripts e software white-label para corretoras",
+        description: isEn ? site.descriptionEn : site.description,
+        inLanguage: isEn ? "en" : "pt-BR",
+        isPartOf: { "@id": websiteId },
+        about: { "@id": organizationId },
+      },
+      {
         "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
         mainEntity: (isEn ? faqsEn : faqs).map(([question, answer]) => ({
           "@type": "Question",
           name: question,
@@ -1471,20 +1495,80 @@ function clonePageDescription(script, locale = "pt") {
 function softwareSchema(script, locale = "pt") {
   const isEn = locale === "en"
   const faqs = cloneFaqs(script, locale)
+  const pagePath = isEn ? `/en/clone-scripts/${script.slug}/` : `/clone-scripts/${script.slug}/`
+  const homePath = isEn ? "/en/" : "/"
+  const pageUrl = absoluteUrl(pagePath)
+  const pageName = isEn ? `${script.name} Platform Clone Script` : `${script.name} Clone Script para Plataforma de Trading`
+  const pageDescription = clonePageDescription(script, locale)
+  const websiteId = `${site.domain}/#website`
+  const organizationId = `${site.domain}/#organization`
   return {
     "@context": "https://schema.org",
     "@graph": [
       {
+        "@type": "Organization",
+        "@id": organizationId,
+        name: site.name,
+        url: site.domain,
+        email: site.email,
+      },
+      {
+        "@type": "WebSite",
+        "@id": websiteId,
+        name: site.name,
+        url: site.domain,
+        inLanguage: isEn ? "en" : "pt-BR",
+        publisher: { "@id": organizationId },
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${pageUrl}#webpage`,
+        url: pageUrl,
+        name: pageName,
+        description: pageDescription,
+        inLanguage: isEn ? "en" : "pt-BR",
+        isPartOf: { "@id": websiteId },
+        about: { "@id": `${pageUrl}#software` },
+        breadcrumb: { "@id": `${pageUrl}#breadcrumb` },
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: isEn ? "Home" : "Início",
+            item: absoluteUrl(homePath),
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Clone scripts",
+            item: absoluteUrl(`${homePath}#solucoes`),
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: pageName,
+            item: pageUrl,
+          },
+        ],
+      },
+      {
         "@type": "SoftwareApplication",
-        name: isEn ? `${script.name} Platform Clone Script` : `${script.name} Clone Script para Plataforma de Trading`,
+        "@id": `${pageUrl}#software`,
+        name: pageName,
+        url: pageUrl,
         applicationCategory: "BusinessApplication",
         operatingSystem: "Web, Desktop, iOS, Android, PWA",
-        provider: { "@type": "Organization", name: site.name, url: site.domain },
-        description: clonePageDescription(script, locale),
+        provider: { "@id": organizationId },
+        description: pageDescription,
         featureList: cloneModuleGroups[locale].flatMap((group) => group.items),
       },
       {
         "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
         mainEntity: faqs.map(([question, answer]) => ({
           "@type": "Question",
           name: question,
@@ -1511,6 +1595,10 @@ ${urls.map((url) => `  <url><loc>${site.domain}${url}</loc><changefreq>weekly</c
 </urlset>`
 }
 
+function absoluteUrl(pathName) {
+  return `${site.domain}${pathName}`
+}
+
 function assetPath(pathName, asset) {
   return `${rootPrefix(pathName)}${asset}`
 }
@@ -1520,9 +1608,8 @@ function rootPrefix(pathName) {
   return depth === 0 ? "" : "../".repeat(depth)
 }
 
-function hrefForPath(currentPathName, targetPathName) {
-  const normalized = targetPathName === "/" ? "index.html" : `${targetPathName.replace(/^\//, "")}index.html`
-  return `${rootPrefix(currentPathName)}${normalized}`
+function hrefForPath(_currentPathName, targetPathName) {
+  return targetPathName
 }
 
 function toEnPath(pathName) {
