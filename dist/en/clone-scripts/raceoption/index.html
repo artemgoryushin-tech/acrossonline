@@ -290,13 +290,30 @@
     <p>Send target regions, commercial model, PSPs, languages, apps and desired modules. We will separate MVP, critical integrations and future improvements.</p>
   </div>
   <form class="lead-form" data-lead-form data-reference="RaceOption" data-slug="raceoption" novalidate>
-  <h2>Request proposal</h2>
-  <label>Name<input name="name" autocomplete="name" required placeholder="Your name"></label>
-  <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@company.com"></label>
-  <label>Phone<input name="phone" type="tel" autocomplete="tel" required placeholder="+1 555 000 0000"></label>
-  <label>Project<textarea name="message" rows="5" placeholder="Regions, PSPs, modules, timeline and compliance"></textarea></label>
-  <label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted about white-label trading software.</label>
-  <button class="button primary" type="submit">Send brief</button>
+  <h2>Request compliance scoping</h2>
+  <p class="lead-form-intro">Share your contact details, target jurisdictions, PSP needs, and platform scope. This is a project intake request, not legal, investment, or licensing advice.</p>
+  <div class="lead-form-grid">
+    <label>Name<input name="name" autocomplete="name" required placeholder="Your name"></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@company.com"></label>
+  </div>
+  <div class="phone-label">
+    <span class="lead-label-text">Phone</span>
+    <div class="phone-field" data-phone-field>
+      <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+        <span data-phone-flag aria-hidden="true"></span>
+        <span data-phone-code></span>
+        <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Phone number">
+      <input data-phone-normalized name="phone" type="hidden">
+      <input data-phone-country-value name="phone_country" type="hidden">
+    </div>
+    <span class="phone-helper">Country is detected automatically, but users can change it before submitting.</span>
+  </div>
+  <label>Company or current business<input name="company_name" autocomplete="organization" placeholder="Brokerage, affiliate team, fintech project..."></label>
+  <label>Project notes<textarea name="message" rows="5" placeholder="Target jurisdictions, licenses, PSPs, apps, CRM needs, compliance timeline..."></textarea></label>
+  <label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted about brokerage platform setup and understand this is not legal, investment, or licensing advice.</label>
+  <button class="button primary" type="submit">Send scoping request</button>
   <p class="form-status" data-form-status aria-live="polite"></p>
 </form>
 </section></main>

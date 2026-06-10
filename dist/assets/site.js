@@ -21,6 +21,10 @@ const formCopy = isEnglish
       reference: "Reference",
       name: "Name",
       phone: "Phone",
+      phoneCountry: "Phone country",
+      phoneInvalid: "Enter a valid phone number for the selected country.",
+      phoneHelper: "Country is detected automatically, but users can change it before submitting.",
+      company: "Company",
       page: "Page",
       project: "Project",
       empty: "No additional notes.",
@@ -36,10 +40,188 @@ const formCopy = isEnglish
       reference: "Referencia",
       name: "Nome",
       phone: "Telefone",
+      phoneCountry: "País do telefone",
+      phoneInvalid: "Digite um telefone válido para o país selecionado.",
+      phoneHelper: "O país é detectado automaticamente, mas você pode alterá-lo antes de enviar.",
+      company: "Empresa",
       page: "Pagina",
       project: "Projeto",
       empty: "Sem notas adicionais.",
     }
+
+const phoneCountryOptions = [
+  { country: "BR", name: "Brazil", callingCode: "55", example: "11 99999-9999" },
+  { country: "US", name: "United States", callingCode: "1", example: "555 000 0000" },
+  { country: "GB", name: "United Kingdom", callingCode: "44", example: "7400 123456" },
+  { country: "NL", name: "Netherlands", callingCode: "31", example: "6 12345678" },
+  { country: "CA", name: "Canada", callingCode: "1", example: "555 000 0000" },
+  { country: "IN", name: "India", callingCode: "91", example: "98765 43210" },
+  { country: "ID", name: "Indonesia", callingCode: "62", example: "812 3456 7890" },
+  { country: "NG", name: "Nigeria", callingCode: "234", example: "801 234 5678" },
+  { country: "ZA", name: "South Africa", callingCode: "27", example: "82 123 4567" },
+  { country: "AE", name: "United Arab Emirates", callingCode: "971", example: "50 123 4567" },
+  { country: "CY", name: "Cyprus", callingCode: "357", example: "96 123456" },
+  { country: "DE", name: "Germany", callingCode: "49", example: "1512 3456789" },
+  { country: "ES", name: "Spain", callingCode: "34", example: "612 345 678" },
+  { country: "FR", name: "France", callingCode: "33", example: "6 12 34 56 78" },
+  { country: "IT", name: "Italy", callingCode: "39", example: "312 345 6789" },
+  { country: "PT", name: "Portugal", callingCode: "351", example: "912 345 678" },
+  { country: "MX", name: "Mexico", callingCode: "52", example: "55 1234 5678" },
+  { country: "AR", name: "Argentina", callingCode: "54", example: "9 11 2345 6789" },
+  { country: "CL", name: "Chile", callingCode: "56", example: "9 1234 5678" },
+  { country: "CO", name: "Colombia", callingCode: "57", example: "300 1234567" },
+  { country: "PE", name: "Peru", callingCode: "51", example: "912 345 678" },
+  { country: "TR", name: "Turkey", callingCode: "90", example: "501 234 5678" },
+  { country: "PL", name: "Poland", callingCode: "48", example: "512 345 678" },
+  { country: "RO", name: "Romania", callingCode: "40", example: "712 345 678" },
+  { country: "UA", name: "Ukraine", callingCode: "380", example: "50 123 4567" },
+  { country: "KZ", name: "Kazakhstan", callingCode: "7", example: "701 123 4567" },
+  { country: "PH", name: "Philippines", callingCode: "63", example: "917 123 4567" },
+  { country: "MY", name: "Malaysia", callingCode: "60", example: "12 345 6789" },
+  { country: "SG", name: "Singapore", callingCode: "65", example: "8123 4567" },
+  { country: "TH", name: "Thailand", callingCode: "66", example: "81 234 5678" },
+  { country: "VN", name: "Vietnam", callingCode: "84", example: "91 234 56 78" },
+  { country: "AU", name: "Australia", callingCode: "61", example: "412 345 678" },
+  { country: "NZ", name: "New Zealand", callingCode: "64", example: "21 123 4567" },
+  { country: "JP", name: "Japan", callingCode: "81", example: "90 1234 5678" },
+  { country: "KR", name: "South Korea", callingCode: "82", example: "10 1234 5678" },
+  { country: "CN", name: "China", callingCode: "86", example: "131 2345 6789" },
+  { country: "HK", name: "Hong Kong", callingCode: "852", example: "5123 4567" },
+]
+
+function getCountryFlag(country) {
+  return country
+    .split("")
+    .map((letter) => String.fromCodePoint(127397 + letter.charCodeAt(0)))
+    .join("")
+}
+
+function getCountryOption(country) {
+  return phoneCountryOptions.find((option) => option.country === country) || phoneCountryOptions[0]
+}
+
+function detectInitialCountry() {
+  const browserRegion = (navigator.language || "").split("-")[1]?.toUpperCase()
+  const pageRegion = pageLang.split("-")[1]?.toUpperCase()
+  const fallback = isEnglish ? "US" : "BR"
+  const detected = [browserRegion, pageRegion, fallback].find((country) =>
+    phoneCountryOptions.some((option) => option.country === country),
+  )
+
+  return getCountryOption(detected)
+}
+
+function normalizePhoneNumber(rawValue, option) {
+  const raw = rawValue.trim()
+  const digits = raw.replace(/\D/g, "")
+
+  if (!digits) return ""
+
+  const normalized = raw.startsWith("+")
+    ? `+${digits}`
+    : digits.startsWith(option.callingCode)
+      ? `+${digits}`
+      : `+${option.callingCode}${digits.replace(/^0+/, "")}`
+  const normalizedDigits = normalized.replace(/\D/g, "")
+
+  return normalizedDigits.length >= 8 && normalizedDigits.length <= 15 ? normalized : ""
+}
+
+function buildCountryMenu(field) {
+  const menu = document.createElement("div")
+  menu.className = "phone-country-menu"
+  menu.setAttribute("data-phone-country-menu", "")
+  menu.setAttribute("role", "listbox")
+  menu.hidden = true
+
+  phoneCountryOptions.forEach((option) => {
+    const button = document.createElement("button")
+    button.type = "button"
+    button.className = "phone-country-option"
+    button.dataset.countryOption = option.country
+    button.setAttribute("role", "option")
+    button.innerHTML = `<span>${getCountryFlag(option.country)}</span><span>${option.name}</span><strong>+${option.callingCode}</strong>`
+    button.addEventListener("click", () => {
+      setPhoneCountry(field, option.country)
+      closeCountryMenu(field)
+    })
+    menu.append(button)
+  })
+
+  field.append(menu)
+  return menu
+}
+
+function closeCountryMenu(field) {
+  const button = field.querySelector("[data-phone-country-button]")
+  const menu = field.querySelector("[data-phone-country-menu]")
+
+  if (menu) menu.hidden = true
+  if (button) button.setAttribute("aria-expanded", "false")
+}
+
+function setPhoneCountry(field, country) {
+  const option = getCountryOption(country)
+  const flag = field.querySelector("[data-phone-flag]")
+  const code = field.querySelector("[data-phone-code]")
+  const hiddenCountry = field.querySelector("[data-phone-country-value]")
+  const input = field.querySelector("[data-phone-input]")
+
+  field.dataset.phoneCountry = option.country
+  if (flag) flag.textContent = getCountryFlag(option.country)
+  if (code) code.textContent = `+${option.callingCode}`
+  if (hiddenCountry) hiddenCountry.value = option.country
+  if (input) input.placeholder = option.example
+  syncPhoneValue(field)
+}
+
+function syncPhoneValue(field) {
+  const option = getCountryOption(field.dataset.phoneCountry)
+  const input = field.querySelector("[data-phone-input]")
+  const hiddenPhone = field.querySelector("[data-phone-normalized]")
+  const value = input ? normalizePhoneNumber(input.value, option) : ""
+
+  if (hiddenPhone) hiddenPhone.value = value
+  if (input) input.setCustomValidity(input.value.trim() && !value ? formCopy.phoneInvalid : "")
+
+  return value
+}
+
+function initPhoneField(field) {
+  const button = field.querySelector("[data-phone-country-button]")
+  const input = field.querySelector("[data-phone-input]")
+  const menu = buildCountryMenu(field)
+
+  setPhoneCountry(field, detectInitialCountry().country)
+
+  button?.addEventListener("click", () => {
+    const isOpen = menu.hidden
+    menu.hidden = !isOpen
+    button.setAttribute("aria-expanded", String(isOpen))
+  })
+
+  field.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeCountryMenu(field)
+  })
+
+  input?.addEventListener("input", () => syncPhoneValue(field))
+  input?.addEventListener("blur", () => syncPhoneValue(field))
+}
+
+function readCookie(name) {
+  const match = document.cookie
+    .split(";")
+    .map((item) => item.trim())
+    .find((item) => item.startsWith(`${name}=`))
+
+  return match ? decodeURIComponent(match.split("=").slice(1).join("=")) : ""
+}
+
+document.addEventListener("click", (event) => {
+  document.querySelectorAll("[data-phone-field]").forEach((field) => {
+    if (!field.contains(event.target)) closeCountryMenu(field)
+  })
+})
 
 if (menuButton && mainNav) {
   menuButton.addEventListener("click", () => {
@@ -162,6 +344,8 @@ if (revealNodes.length > 0) {
   }
 }
 
+document.querySelectorAll("[data-phone-field]").forEach(initPhoneField)
+
 document.querySelectorAll("[data-lead-form]").forEach((form) => {
   form.addEventListener("submit", async (event) => {
     event.preventDefault()
@@ -170,14 +354,21 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
     const name = String(formData.get("name") || "").trim()
     const email = String(formData.get("email") || "").trim()
     const phone = String(formData.get("phone") || "").trim()
+    const phoneCountry = String(formData.get("phone_country") || "").trim()
+    const company = String(formData.get("company_name") || "").trim()
     const message = String(formData.get("message") || "").trim()
     const consent = formData.get("consent")
+    const phoneInput = form.querySelector("[data-phone-input]")
     const reference = form.dataset.reference || "Arcos Online"
     const slug = form.dataset.slug || "home"
     const status = form.querySelector("[data-form-status]")
     const button = form.querySelector("button[type='submit']")
 
     if (!name || !email || !phone) {
+      if (!phone && phoneInput) {
+        phoneInput.setCustomValidity(phoneInput.value.trim() ? formCopy.phoneInvalid : formCopy.required)
+        phoneInput.reportValidity()
+      }
       setStatus(status, formCopy.required, "error")
       return
     }
@@ -202,16 +393,22 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
       `${formCopy.name}: ${name}`,
       `Email: ${email}`,
       `${formCopy.phone}: ${phone}`,
+      phoneCountry ? `${formCopy.phoneCountry}: ${phoneCountry}` : "",
+      company ? `${formCopy.company}: ${company}` : "",
       `${formCopy.page}: ${pageUrl}`,
       "",
       `${formCopy.project}:`,
       message || formCopy.empty,
-    ].join("\n")
+    ]
+      .filter(Boolean)
+      .join("\n")
 
     payload.set("first_name", name)
     payload.set("name", name)
     payload.set("email", email)
     payload.set("phone", phone)
+    payload.set("phone_country", phoneCountry)
+    payload.set("company_name", company)
     payload.set("comment", comment)
     payload.set("message", comment)
     payload.set("terms_agree", "on")
@@ -225,9 +422,13 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
     payload.set("reference", reference)
     payload.set("slug", slug)
 
-    ;["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "roistat"].forEach((key) => {
+    ;["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((key) => {
       payload.set(key, searchParams.get(key) || "")
     })
+
+    const roistat = searchParams.get("roistat") || readCookie("roistat_visit")
+    payload.set("roistat", roistat || "")
+    payload.set("roistat_id", roistat || "")
 
     setStatus(status, formCopy.sending, "")
     if (button) button.disabled = true
@@ -244,6 +445,9 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
       }
 
       form.reset()
+      form.querySelectorAll("[data-phone-field]").forEach((field) => {
+        setPhoneCountry(field, field.dataset.phoneCountry || detectInitialCountry().country)
+      })
       setStatus(status, formCopy.success, "success")
     } catch (error) {
       setStatus(status, formCopy.error, "error")

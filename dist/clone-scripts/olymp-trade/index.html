@@ -290,13 +290,30 @@
     <p>Envie regiões-alvo, modelo comercial, PSPs, idiomas, apps e módulos desejados. Vamos separar MVP, integrações críticas e melhorias futuras.</p>
   </div>
   <form class="lead-form" data-lead-form data-reference="Olymp Trade" data-slug="olymp-trade" novalidate>
-  <h2>Solicitar proposta</h2>
-  <label>Nome<input name="name" autocomplete="name" required placeholder="Seu nome"></label>
-  <label>Email<input name="email" type="email" autocomplete="email" required placeholder="nome@empresa.com"></label>
-  <label>Telefone<input name="phone" type="tel" autocomplete="tel" required placeholder="+55 11 99999-9999"></label>
-  <label>Projeto<textarea name="message" rows="5" placeholder="Regiões, PSPs, módulos, prazo e compliance"></textarea></label>
-  <label class="consent"><input name="consent" type="checkbox" required> Aceito ser contatado sobre software white-label de trading.</label>
-  <button class="button primary" type="submit">Enviar briefing</button>
+  <h2>Solicitar escopo de compliance</h2>
+  <p class="lead-form-intro">Compartilhe seus contatos, jurisdições-alvo, PSPs e escopo da plataforma. Este é um briefing de projeto, não aconselhamento legal, de investimento ou licenciamento.</p>
+  <div class="lead-form-grid">
+    <label>Nome<input name="name" autocomplete="name" required placeholder="Seu nome"></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required placeholder="nome@empresa.com"></label>
+  </div>
+  <div class="phone-label">
+    <span class="lead-label-text">Telefone</span>
+    <div class="phone-field" data-phone-field>
+      <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+        <span data-phone-flag aria-hidden="true"></span>
+        <span data-phone-code></span>
+        <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Número de telefone">
+      <input data-phone-normalized name="phone" type="hidden">
+      <input data-phone-country-value name="phone_country" type="hidden">
+    </div>
+    <span class="phone-helper">O país é detectado automaticamente, mas você pode alterá-lo antes de enviar.</span>
+  </div>
+  <label>Empresa ou operação atual<input name="company_name" autocomplete="organization" placeholder="Corretora, afiliados, fintech..."></label>
+  <label>Notas do projeto<textarea name="message" rows="5" placeholder="Jurisdições-alvo, licenças, PSPs, apps, CRM e prazo de compliance..."></textarea></label>
+  <label class="consent"><input name="consent" type="checkbox" required> Aceito ser contatado sobre configuração de plataforma de corretagem e entendo que isso não é aconselhamento legal, de investimento ou licenciamento.</label>
+  <button class="button primary" type="submit">Enviar escopo</button>
   <p class="form-status" data-form-status aria-live="polite"></p>
 </form>
 </section></main>

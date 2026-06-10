@@ -1409,14 +1409,69 @@ function cloneFaqs(script, locale = "pt") {
 
 function renderLeadForm(reference, slug, locale = "pt") {
   const isEn = locale === "en"
+  const copy = isEn
+    ? {
+        title: "Request compliance scoping",
+        intro:
+          "Share your contact details, target jurisdictions, PSP needs, and platform scope. This is a project intake request, not legal, investment, or licensing advice.",
+        name: "Name",
+        namePlaceholder: "Your name",
+        emailPlaceholder: "name@company.com",
+        phone: "Phone",
+        phonePlaceholder: "Phone number",
+        phoneHelper: "Country is detected automatically, but users can change it before submitting.",
+        company: "Company or current business",
+        companyPlaceholder: "Brokerage, affiliate team, fintech project...",
+        project: "Project notes",
+        projectPlaceholder: "Target jurisdictions, licenses, PSPs, apps, CRM needs, compliance timeline...",
+        consent:
+          "I agree to be contacted about brokerage platform setup and understand this is not legal, investment, or licensing advice.",
+        submit: "Send scoping request",
+      }
+    : {
+        title: "Solicitar escopo de compliance",
+        intro:
+          "Compartilhe seus contatos, jurisdições-alvo, PSPs e escopo da plataforma. Este é um briefing de projeto, não aconselhamento legal, de investimento ou licenciamento.",
+        name: "Nome",
+        namePlaceholder: "Seu nome",
+        emailPlaceholder: "nome@empresa.com",
+        phone: "Telefone",
+        phonePlaceholder: "Número de telefone",
+        phoneHelper: "O país é detectado automaticamente, mas você pode alterá-lo antes de enviar.",
+        company: "Empresa ou operação atual",
+        companyPlaceholder: "Corretora, afiliados, fintech...",
+        project: "Notas do projeto",
+        projectPlaceholder: "Jurisdições-alvo, licenças, PSPs, apps, CRM e prazo de compliance...",
+        consent:
+          "Aceito ser contatado sobre configuração de plataforma de corretagem e entendo que isso não é aconselhamento legal, de investimento ou licenciamento.",
+        submit: "Enviar escopo",
+      }
+
   return `<form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
-  <h2>${isEn ? "Request proposal" : "Solicitar proposta"}</h2>
-  <label>${isEn ? "Name" : "Nome"}<input name="name" autocomplete="name" required placeholder="${isEn ? "Your name" : "Seu nome"}"></label>
-  <label>Email<input name="email" type="email" autocomplete="email" required placeholder="${isEn ? "name@company.com" : "nome@empresa.com"}"></label>
-  <label>${isEn ? "Phone" : "Telefone"}<input name="phone" type="tel" autocomplete="tel" required placeholder="${isEn ? "+1 555 000 0000" : "+55 11 99999-9999"}"></label>
-  <label>${isEn ? "Project" : "Projeto"}<textarea name="message" rows="5" placeholder="${isEn ? "Regions, PSPs, modules, timeline and compliance" : "Regiões, PSPs, módulos, prazo e compliance"}"></textarea></label>
-  <label class="consent"><input name="consent" type="checkbox" required> ${isEn ? "I agree to be contacted about white-label trading software." : "Aceito ser contatado sobre software white-label de trading."}</label>
-  <button class="button primary" type="submit">${isEn ? "Send brief" : "Enviar briefing"}</button>
+  <h2>${copy.title}</h2>
+  <p class="lead-form-intro">${copy.intro}</p>
+  <div class="lead-form-grid">
+    <label>${copy.name}<input name="name" autocomplete="name" required placeholder="${copy.namePlaceholder}"></label>
+    <label>Email<input name="email" type="email" autocomplete="email" required placeholder="${copy.emailPlaceholder}"></label>
+  </div>
+  <div class="phone-label">
+    <span class="lead-label-text">${copy.phone}</span>
+    <div class="phone-field" data-phone-field>
+      <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+        <span data-phone-flag aria-hidden="true"></span>
+        <span data-phone-code></span>
+        <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="${copy.phonePlaceholder}">
+      <input data-phone-normalized name="phone" type="hidden">
+      <input data-phone-country-value name="phone_country" type="hidden">
+    </div>
+    <span class="phone-helper">${copy.phoneHelper}</span>
+  </div>
+  <label>${copy.company}<input name="company_name" autocomplete="organization" placeholder="${copy.companyPlaceholder}"></label>
+  <label>${copy.project}<textarea name="message" rows="5" placeholder="${copy.projectPlaceholder}"></textarea></label>
+  <label class="consent"><input name="consent" type="checkbox" required> ${copy.consent}</label>
+  <button class="button primary" type="submit">${copy.submit}</button>
   <p class="form-status" data-form-status aria-live="polite"></p>
 </form>`
 }

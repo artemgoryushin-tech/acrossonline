@@ -1210,7 +1210,22 @@ details p {
   line-height: 1;
 }
 
-.lead-form label {
+.lead-form-intro {
+  margin: -2px 0 4px;
+  color: var(--muted);
+  font-size: 0.98rem;
+  font-weight: 620;
+  line-height: 1.5;
+}
+
+.lead-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.lead-form label,
+.lead-form .phone-label {
   display: grid;
   gap: 7px;
   color: var(--ink);
@@ -1242,6 +1257,102 @@ details p {
 .lead-form textarea {
   min-height: 128px;
   resize: vertical;
+}
+
+.lead-label-text {
+  display: inline-flex;
+}
+
+.phone-field {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(112px, 0.34fr) minmax(0, 1fr);
+  gap: 10px;
+}
+
+.phone-country-button {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 13px 12px;
+  font-size: 0.96rem;
+  font-weight: 850;
+  cursor: pointer;
+  transition: background 160ms ease, box-shadow 160ms ease;
+}
+
+.phone-country-button:hover,
+.phone-country-button:focus-visible {
+  background: white;
+  box-shadow: 0 0 0 4px rgba(0, 123, 111, 0.16);
+  outline: none;
+}
+
+.phone-country-chevron {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.phone-country-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 30;
+  width: min(360px, 100%);
+  max-height: 270px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: white;
+  box-shadow: var(--shadow-hard);
+  padding: 6px;
+}
+
+.phone-country-menu[hidden] {
+  display: none;
+}
+
+.phone-country-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+  border: 0;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--ink);
+  padding: 10px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phone-country-option span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.phone-country-option:hover,
+.phone-country-option:focus-visible {
+  background: rgba(0, 123, 111, 0.08);
+  outline: none;
+}
+
+.phone-helper {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 620;
+  line-height: 1.5;
+  text-transform: none;
 }
 
 .lead-form .consent {
@@ -3154,6 +3265,15 @@ details p {
 
   .main-nav {
     width: calc(100vw - 20px);
+  }
+
+  .lead-form-grid,
+  .phone-field {
+    grid-template-columns: 1fr;
+  }
+
+  .phone-country-menu {
+    width: 100%;
   }
 
   .wero-hero {
