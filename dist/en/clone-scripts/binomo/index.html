@@ -289,33 +289,46 @@
     <h2>Request scope for Binomo clone script</h2>
     <p>Send target regions, commercial model, PSPs, languages, apps and desired modules. We will separate MVP, critical integrations and future improvements.</p>
   </div>
-  <form class="lead-form" data-lead-form data-reference="Binomo" data-slug="binomo" novalidate>
-  <h2>Request compliance scoping</h2>
-  <p class="lead-form-intro">Share your contact details, target jurisdictions, PSP needs, and platform scope. This is a project intake request, not legal, investment, or licensing advice.</p>
-  <div class="lead-form-grid">
-    <label>Name<input name="name" autocomplete="name" required placeholder="Your name"></label>
-    <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@company.com"></label>
-  </div>
-  <div class="phone-label">
-    <span class="lead-label-text">Phone</span>
-    <div class="phone-field" data-phone-field>
-      <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
-        <span data-phone-flag aria-hidden="true"></span>
-        <span data-phone-code></span>
-        <span class="phone-country-chevron" aria-hidden="true">⌄</span>
-      </button>
-      <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Phone number">
-      <input data-phone-normalized name="phone" type="hidden">
-      <input data-phone-country-value name="phone_country" type="hidden">
+  <div class="lead-modal-shell" data-lead-modal>
+  <article class="lead-cta-card">
+    <h3>Scope the platform with Arcos</h3>
+    <p>Open a short intake form with phone country detection, CRM tracking, and project context fields.</p>
+    <button class="button primary lead-modal-open" type="button" data-lead-modal-open>Open scoping form</button>
+  </article>
+  <div class="lead-modal" data-lead-modal-panel hidden>
+    <div class="lead-modal-backdrop" data-lead-modal-close></div>
+    <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="lead-modal-en-binomo-title">
+      <button class="lead-modal-close" type="button" data-lead-modal-close aria-label="Close form">×</button>
+      <form class="lead-form" data-lead-form data-reference="Binomo" data-slug="binomo" novalidate>
+        <h2 id="lead-modal-en-binomo-title">Request compliance scoping</h2>
+        <p class="lead-form-intro">Share your contact details, target jurisdictions, PSP needs, and platform scope. This is a project intake request, not legal, investment, or licensing advice.</p>
+        <div class="lead-form-grid">
+          <label>Name<input name="name" autocomplete="name" required placeholder="Your name"></label>
+          <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@company.com"></label>
+        </div>
+        <div class="phone-label">
+          <span class="lead-label-text">Phone</span>
+          <div class="phone-field" data-phone-field>
+            <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+              <span data-phone-flag aria-hidden="true"></span>
+              <span data-phone-code></span>
+              <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Phone number">
+            <input data-phone-normalized name="phone" type="hidden">
+            <input data-phone-country-value name="phone_country" type="hidden">
+          </div>
+          <span class="phone-helper">Country is detected automatically, but users can change it before submitting.</span>
+        </div>
+        <label>Company or current business<input name="company_name" autocomplete="organization" placeholder="Brokerage, affiliate team, fintech project..."></label>
+        <label>Project notes<textarea name="message" rows="5" placeholder="Target jurisdictions, licenses, PSPs, apps, CRM needs, compliance timeline..."></textarea></label>
+        <label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted about brokerage platform setup and understand this is not legal, investment, or licensing advice.</label>
+        <button class="button primary" type="submit">Send scoping request</button>
+        <p class="form-status" data-form-status aria-live="polite"></p>
+      </form>
     </div>
-    <span class="phone-helper">Country is detected automatically, but users can change it before submitting.</span>
   </div>
-  <label>Company or current business<input name="company_name" autocomplete="organization" placeholder="Brokerage, affiliate team, fintech project..."></label>
-  <label>Project notes<textarea name="message" rows="5" placeholder="Target jurisdictions, licenses, PSPs, apps, CRM needs, compliance timeline..."></textarea></label>
-  <label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted about brokerage platform setup and understand this is not legal, investment, or licensing advice.</label>
-  <button class="button primary" type="submit">Send scoping request</button>
-  <p class="form-status" data-form-status aria-live="polite"></p>
-</form>
+</div>
 </section></main>
   <footer class="site-footer">
   <div class="footer-grid">

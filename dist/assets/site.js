@@ -344,6 +344,72 @@ if (revealNodes.length > 0) {
   }
 }
 
+function getModalFocusables(shell) {
+  return [...shell.querySelectorAll('a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])')].filter(
+    (element) => !element.disabled && element.offsetParent !== null,
+  )
+}
+
+function openLeadModal(shell) {
+  const panel = shell.querySelector("[data-lead-modal-panel]")
+
+  if (!panel) return
+
+  shell.lastFocusedElement = document.activeElement
+  panel.hidden = false
+  document.body.classList.add("modal-open")
+
+  requestAnimationFrame(() => {
+    const firstInput = shell.querySelector('input[name="name"]')
+    const focusables = getModalFocusables(shell)
+    ;(firstInput || focusables[0])?.focus()
+  })
+}
+
+function closeLeadModal(shell) {
+  const panel = shell.querySelector("[data-lead-modal-panel]")
+
+  if (!panel || panel.hidden) return
+
+  panel.hidden = true
+
+  if (!document.querySelector("[data-lead-modal-panel]:not([hidden])")) {
+    document.body.classList.remove("modal-open")
+  }
+
+  shell.lastFocusedElement?.focus?.()
+}
+
+document.querySelectorAll("[data-lead-modal]").forEach((shell) => {
+  shell.querySelector("[data-lead-modal-open]")?.addEventListener("click", () => openLeadModal(shell))
+  shell.querySelectorAll("[data-lead-modal-close]").forEach((button) => {
+    button.addEventListener("click", () => closeLeadModal(shell))
+  })
+
+  shell.querySelector("[data-lead-modal-panel]")?.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeLeadModal(shell)
+      return
+    }
+
+    if (event.key !== "Tab") return
+
+    const focusables = getModalFocusables(shell)
+    const first = focusables[0]
+    const last = focusables[focusables.length - 1]
+
+    if (!first || !last) return
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault()
+      last.focus()
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault()
+      first.focus()
+    }
+  })
+})
+
 document.querySelectorAll("[data-phone-field]").forEach(initPhoneField)
 
 document.querySelectorAll("[data-lead-form]").forEach((form) => {

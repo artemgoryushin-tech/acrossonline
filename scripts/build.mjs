@@ -1409,11 +1409,16 @@ function cloneFaqs(script, locale = "pt") {
 
 function renderLeadForm(reference, slug, locale = "pt") {
   const isEn = locale === "en"
+  const modalId = `lead-modal-${locale}-${slug.replace(/[^a-z0-9-]/gi, "-")}`
   const copy = isEn
     ? {
         title: "Request compliance scoping",
         intro:
           "Share your contact details, target jurisdictions, PSP needs, and platform scope. This is a project intake request, not legal, investment, or licensing advice.",
+        ctaTitle: "Scope the platform with Arcos",
+        ctaText: "Open a short intake form with phone country detection, CRM tracking, and project context fields.",
+        ctaButton: "Open scoping form",
+        closeLabel: "Close form",
         name: "Name",
         namePlaceholder: "Your name",
         emailPlaceholder: "name@company.com",
@@ -1432,6 +1437,10 @@ function renderLeadForm(reference, slug, locale = "pt") {
         title: "Solicitar escopo de compliance",
         intro:
           "Compartilhe seus contatos, jurisdições-alvo, PSPs e escopo da plataforma. Este é um briefing de projeto, não aconselhamento legal, de investimento ou licenciamento.",
+        ctaTitle: "Defina o escopo com a Arcos",
+        ctaText: "Abra um briefing curto com detecção de país no telefone, tracking de CRM e contexto do projeto.",
+        ctaButton: "Abrir formulário",
+        closeLabel: "Fechar formulário",
         name: "Nome",
         namePlaceholder: "Seu nome",
         emailPlaceholder: "nome@empresa.com",
@@ -1447,34 +1456,48 @@ function renderLeadForm(reference, slug, locale = "pt") {
         submit: "Enviar escopo",
       }
 
-  return `<form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
-  <h2>${copy.title}</h2>
-  <p class="lead-form-intro">${copy.intro}</p>
-  <div class="lead-form-grid">
-    <label>${copy.name}<input name="name" autocomplete="name" required placeholder="${copy.namePlaceholder}"></label>
-    <label>Email<input name="email" type="email" autocomplete="email" required placeholder="${copy.emailPlaceholder}"></label>
-  </div>
-  <div class="phone-label">
-    <span class="lead-label-text">${copy.phone}</span>
-    <div class="phone-field" data-phone-field>
-      <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
-        <span data-phone-flag aria-hidden="true"></span>
-        <span data-phone-code></span>
-        <span class="phone-country-chevron" aria-hidden="true">⌄</span>
-      </button>
-      <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="${copy.phonePlaceholder}">
-      <input data-phone-normalized name="phone" type="hidden">
-      <input data-phone-country-value name="phone_country" type="hidden">
+  return `<div class="lead-modal-shell" data-lead-modal>
+  <article class="lead-cta-card">
+    <h3>${copy.ctaTitle}</h3>
+    <p>${copy.ctaText}</p>
+    <button class="button primary lead-modal-open" type="button" data-lead-modal-open>${copy.ctaButton}</button>
+  </article>
+  <div class="lead-modal" data-lead-modal-panel hidden>
+    <div class="lead-modal-backdrop" data-lead-modal-close></div>
+    <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title">
+      <button class="lead-modal-close" type="button" data-lead-modal-close aria-label="${copy.closeLabel}">×</button>
+      <form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
+        <h2 id="${modalId}-title">${copy.title}</h2>
+        <p class="lead-form-intro">${copy.intro}</p>
+        <div class="lead-form-grid">
+          <label>${copy.name}<input name="name" autocomplete="name" required placeholder="${copy.namePlaceholder}"></label>
+          <label>Email<input name="email" type="email" autocomplete="email" required placeholder="${copy.emailPlaceholder}"></label>
+        </div>
+        <div class="phone-label">
+          <span class="lead-label-text">${copy.phone}</span>
+          <div class="phone-field" data-phone-field>
+            <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+              <span data-phone-flag aria-hidden="true"></span>
+              <span data-phone-code></span>
+              <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+            </button>
+            <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="${copy.phonePlaceholder}">
+            <input data-phone-normalized name="phone" type="hidden">
+            <input data-phone-country-value name="phone_country" type="hidden">
+          </div>
+          <span class="phone-helper">${copy.phoneHelper}</span>
+        </div>
+        <label>${copy.company}<input name="company_name" autocomplete="organization" placeholder="${copy.companyPlaceholder}"></label>
+        <label>${copy.project}<textarea name="message" rows="5" placeholder="${copy.projectPlaceholder}"></textarea></label>
+        <label class="consent"><input name="consent" type="checkbox" required> ${copy.consent}</label>
+        <button class="button primary" type="submit">${copy.submit}</button>
+        <p class="form-status" data-form-status aria-live="polite"></p>
+      </form>
     </div>
-    <span class="phone-helper">${copy.phoneHelper}</span>
   </div>
-  <label>${copy.company}<input name="company_name" autocomplete="organization" placeholder="${copy.companyPlaceholder}"></label>
-  <label>${copy.project}<textarea name="message" rows="5" placeholder="${copy.projectPlaceholder}"></textarea></label>
-  <label class="consent"><input name="consent" type="checkbox" required> ${copy.consent}</label>
-  <button class="button primary" type="submit">${copy.submit}</button>
-  <p class="form-status" data-form-status aria-live="polite"></p>
-</form>`
+</div>`
 }
+
 
 function renderPageSnapshot(script, locale = "pt") {
   const isEn = locale === "en"
