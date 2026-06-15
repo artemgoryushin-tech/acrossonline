@@ -845,9 +845,11 @@ function renderHome(locale = "pt", pathName = "/") {
   <div class="script-grid">${scripts.map((script) => renderScriptCard(script, "pt")).join("")}</div>
 </section>
 
-<section id="faq" class="section faq-section" data-reveal>
-  <p class="top-title">FAQ</p>
-  <h2>Perguntas frequentes antes da proposta</h2>
+<section id="faq" class="section faq-section home-faq-section" data-reveal>
+  <div class="section-heading">
+    <p class="top-title">FAQ</p>
+    <h2>Perguntas frequentes antes da proposta</h2>
+  </div>
   <div class="faq-list">${faqs.map(renderFaq).join("")}</div>
 </section>
 
@@ -954,9 +956,11 @@ function renderHomeEn(pathName) {
   <div class="script-grid">${scriptsEn.map((script) => renderScriptCard(script, "en")).join("")}</div>
 </section>
 
-<section id="faq" class="section faq-section" data-reveal>
-  <p class="top-title">FAQ</p>
-  <h2>Common questions before the proposal</h2>
+<section id="faq" class="section faq-section home-faq-section" data-reveal>
+  <div class="section-heading">
+    <p class="top-title">FAQ</p>
+    <h2>Common questions before the proposal</h2>
+  </div>
   <div class="faq-list">${faqsEn.map(renderFaq).join("")}</div>
 </section>
 
@@ -1003,7 +1007,7 @@ ${renderCloneFeatureShowcase(script, "pt")}
   ${renderProcess(cloneLaunchSteps.pt)}
 </section>
 
-<section class="section faq-section">
+<section class="section faq-section clone-faq-section">
   <div class="section-heading">
     <span class="eyebrow">FAQ</span>
     <h2>Perguntas sobre ${script.name} clone script</h2>
@@ -1054,7 +1058,7 @@ ${renderCloneFeatureShowcase(script, "en")}
   ${renderProcess(cloneLaunchSteps.en)}
 </section>
 
-<section class="section faq-section">
+<section class="section faq-section clone-faq-section">
   <div class="section-heading">
     <span class="eyebrow">FAQ</span>
     <h2>Questions about ${script.name} clone script</h2>
@@ -1464,7 +1468,7 @@ function renderLeadForm(reference, slug, locale = "pt") {
   </article>
   <div class="lead-modal" data-lead-modal-panel hidden>
     <div class="lead-modal-backdrop" data-lead-modal-close></div>
-    <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title">
+    <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title" tabindex="-1">
       <button class="lead-modal-close" type="button" data-lead-modal-close aria-label="${copy.closeLabel}">×</button>
       <form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
         <h2 id="${modalId}-title">${copy.title}</h2>

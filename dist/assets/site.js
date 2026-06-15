@@ -360,9 +360,14 @@ function openLeadModal(shell) {
   document.body.classList.add("modal-open")
 
   requestAnimationFrame(() => {
-    const firstInput = shell.querySelector('input[name="name"]')
-    const focusables = getModalFocusables(shell)
-    ;(firstInput || focusables[0])?.focus()
+    const dialog = panel.querySelector(".lead-modal-dialog")
+
+    if (dialog) {
+      dialog.scrollTop = 0
+      dialog.focus({ preventScroll: true })
+    } else {
+      getModalFocusables(shell)[0]?.focus({ preventScroll: true })
+    }
   })
 }
 
@@ -399,6 +404,14 @@ document.querySelectorAll("[data-lead-modal]").forEach((shell) => {
     const last = focusables[focusables.length - 1]
 
     if (!first || !last) return
+
+    const dialog = shell.querySelector(".lead-modal-dialog")
+
+    if (document.activeElement === dialog) {
+      event.preventDefault()
+      ;(event.shiftKey ? last : first).focus()
+      return
+    }
 
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault()

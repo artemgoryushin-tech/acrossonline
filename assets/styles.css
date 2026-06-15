@@ -1143,14 +1143,38 @@ p {
 
 .faq-section {
   display: grid;
-  grid-template-columns: minmax(0, 0.72fr) minmax(420px, 1fr);
-  gap: 56px;
+  grid-template-columns: minmax(320px, 0.72fr) minmax(440px, 0.95fr);
+  gap: clamp(28px, 4vw, 56px);
   align-items: start;
+}
+
+.faq-section .section-heading {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.faq-section h2 {
+  max-width: 680px;
+  margin: 0;
+  font-size: clamp(2.75rem, 4.8vw, 5.1rem);
+  line-height: 0.92;
+}
+
+.clone-faq-section {
+  grid-template-columns: minmax(340px, 0.72fr) minmax(420px, 0.88fr);
+}
+
+.clone-faq-section h2 {
+  max-width: 620px;
+  font-size: clamp(2.6rem, 4.7vw, 5.1rem);
 }
 
 .faq-list {
   display: grid;
+  align-self: start;
   gap: 12px;
+  min-width: 0;
 }
 
 details {
@@ -1234,29 +1258,37 @@ details p {
 .lead-modal {
   position: fixed;
   inset: 0;
-  z-index: 2200;
+  z-index: 7000;
   display: grid;
-  place-items: center;
-  padding: 18px;
+  align-items: center;
+  justify-items: center;
+  overflow-y: auto;
+  padding: clamp(18px, 5vh, 40px) 16px;
 }
 
 .lead-modal-backdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
-  background: rgba(29, 28, 28, 0.54);
+  background: rgba(29, 28, 28, 0.56);
   backdrop-filter: blur(5px);
 }
 
 .lead-modal-dialog {
   position: relative;
-  width: min(780px, calc(100vw - 32px));
-  max-height: calc(100dvh - 32px);
+  width: min(700px, calc(100vw - 40px));
+  max-height: calc(100dvh - 48px);
   overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: white;
   box-shadow: 0 24px 80px rgba(29, 28, 28, 0.34);
-  padding: clamp(22px, 4vw, 34px);
+  padding: clamp(18px, 2.4vw, 28px);
+  scrollbar-gutter: stable;
+}
+
+.lead-modal-dialog:focus {
+  outline: none;
 }
 
 .lead-modal-close {
@@ -1300,37 +1332,40 @@ body.modal-open {
 }
 
 .lead-modal-dialog .lead-form {
+  gap: 11px;
   border: 0;
   box-shadow: none;
   padding: 0;
 }
 
 .lead-form h2 {
-  margin-bottom: 4px;
-  font-size: 1.8rem;
-  line-height: 1;
+  max-width: calc(100% - 54px);
+  margin: 0;
+  font-size: clamp(1.34rem, 2vw, 1.72rem);
+  line-height: 0.98;
 }
 
 .lead-form-intro {
-  margin: -2px 0 4px;
+  max-width: 62ch;
+  margin: 0 0 2px;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   font-weight: 620;
-  line-height: 1.5;
+  line-height: 1.38;
 }
 
 .lead-form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 
 .lead-form label,
 .lead-form .phone-label {
   display: grid;
-  gap: 7px;
+  gap: 5px;
   color: var(--ink);
-  font-size: 0.76rem;
+  font-size: 0.72rem;
   font-weight: 900;
   text-transform: uppercase;
 }
@@ -1338,12 +1373,13 @@ body.modal-open {
 .lead-form input,
 .lead-form textarea {
   width: 100%;
+  min-height: 46px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--paper);
   color: var(--ink);
-  padding: 13px 12px;
-  font-size: 0.96rem;
+  padding: 10px 12px;
+  font-size: 0.9rem;
   text-transform: none;
   transition: background 160ms ease, box-shadow 160ms ease;
 }
@@ -1356,7 +1392,7 @@ body.modal-open {
 }
 
 .lead-form textarea {
-  min-height: 128px;
+  min-height: 96px;
   resize: vertical;
 }
 
@@ -3378,13 +3414,23 @@ body.modal-open {
   }
 
   .lead-modal {
-    padding: 10px;
+    align-items: start;
+    padding: 16px 10px;
   }
 
   .lead-modal-dialog {
-    width: min(100%, calc(100vw - 48px));
-    max-height: calc(100dvh - 20px);
-    padding: 22px;
+    width: min(100%, calc(100vw - 24px));
+    max-height: calc(100dvh - 32px);
+    padding: 18px;
+  }
+
+  .lead-form h2 {
+    max-width: calc(100% - 48px);
+    font-size: clamp(1.18rem, 8vw, 1.42rem);
+  }
+
+  .lead-form-intro {
+    font-size: 0.86rem;
   }
 
   .phone-country-menu {
