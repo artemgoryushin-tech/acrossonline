@@ -1262,7 +1262,7 @@ details p {
   display: grid;
   align-items: center;
   justify-items: center;
-  overflow-y: auto;
+  overflow: hidden;
   padding: clamp(18px, 5vh, 40px) 16px;
 }
 
@@ -1275,16 +1275,16 @@ details p {
 
 .lead-modal-dialog {
   position: relative;
-  width: min(700px, calc(100vw - 40px));
-  max-height: calc(100dvh - 48px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  width: min(660px, calc(100vw - 40px));
+  max-height: min(820px, calc(100dvh - 64px));
+  min-height: 0;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: white;
   box-shadow: 0 24px 80px rgba(29, 28, 28, 0.34);
-  padding: clamp(18px, 2.4vw, 28px);
-  scrollbar-gutter: stable;
 }
 
 .lead-modal-dialog:focus {
@@ -1293,9 +1293,9 @@ details p {
 
 .lead-modal-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 2;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
   display: grid;
   width: 36px;
   height: 36px;
@@ -1317,13 +1317,29 @@ details p {
   outline: none;
 }
 
+html.modal-open,
 body.modal-open {
   overflow: hidden;
 }
 
+.lead-modal-head {
+  display: grid;
+  gap: 8px;
+  border-bottom: 1px solid rgba(29, 28, 28, 0.14);
+  padding: 24px 72px 16px 28px;
+}
+
+.lead-modal-head h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, 2vw, 1.78rem);
+  line-height: 1;
+}
+
 .lead-form {
   display: grid;
-  gap: 14px;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: white;
@@ -1332,24 +1348,33 @@ body.modal-open {
 }
 
 .lead-modal-dialog .lead-form {
-  gap: 11px;
   border: 0;
   box-shadow: none;
   padding: 0;
 }
 
-.lead-form h2 {
-  max-width: calc(100% - 54px);
-  margin: 0;
-  font-size: clamp(1.34rem, 2vw, 1.72rem);
-  line-height: 0.98;
+.lead-form-body {
+  display: grid;
+  align-content: start;
+  gap: 11px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px 28px 0;
+  scrollbar-gutter: stable;
+}
+
+.lead-form-actions {
+  border-top: 1px solid rgba(29, 28, 28, 0.14);
+  background: white;
+  padding: 16px 28px 24px;
 }
 
 .lead-form-intro {
   max-width: 62ch;
-  margin: 0 0 2px;
+  margin: 0;
   color: var(--muted);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 620;
   line-height: 1.38;
 }
@@ -1410,6 +1435,7 @@ body.modal-open {
 .phone-country-button {
   display: flex;
   min-width: 0;
+  min-height: 46px;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -1417,8 +1443,8 @@ body.modal-open {
   border-radius: var(--radius);
   background: var(--paper);
   color: var(--ink);
-  padding: 13px 12px;
-  font-size: 0.96rem;
+  padding: 10px 12px;
+  font-size: 0.9rem;
   font-weight: 850;
   cursor: pointer;
   transition: background 160ms ease, box-shadow 160ms ease;
@@ -1513,8 +1539,9 @@ body.modal-open {
 .form-status {
   min-height: 20px;
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.84rem;
   font-weight: 700;
+  line-height: 1.35;
 }
 
 .form-status.is-success {
@@ -3421,16 +3448,26 @@ body.modal-open {
   .lead-modal-dialog {
     width: min(100%, calc(100vw - 24px));
     max-height: calc(100dvh - 32px);
-    padding: 18px;
   }
 
-  .lead-form h2 {
-    max-width: calc(100% - 48px);
+  .lead-modal-head {
+    padding: 18px 62px 14px 18px;
+  }
+
+  .lead-modal-head h2 {
     font-size: clamp(1.18rem, 8vw, 1.42rem);
   }
 
+  .lead-form-body {
+    padding: 14px 18px 0;
+  }
+
+  .lead-form-actions {
+    padding: 14px 18px 18px;
+  }
+
   .lead-form-intro {
-    font-size: 0.86rem;
+    font-size: 0.84rem;
   }
 
   .phone-country-menu {

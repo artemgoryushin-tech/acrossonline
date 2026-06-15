@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Arcos Online | Clone scripts for white-label brokerages</title>
   <meta name="description" content="Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.">
-  <link rel="icon" href="../assets/favicon.ico?v=20260608-responsive-v1" sizes="any" type="image/x-icon">
+  <link rel="icon" href="../assets/favicon.ico?v=20260615-modal-api-v3" sizes="any" type="image/x-icon">
   <link rel="canonical" href="https://arcosonline.com.br/en/">
   <link rel="alternate" hreflang="pt-BR" href="https://arcosonline.com.br/">
   <link rel="alternate" hreflang="en" href="https://arcosonline.com.br/en/">
@@ -21,7 +21,7 @@
   <meta name="twitter:title" content="Arcos Online | Clone scripts for white-label brokerages">
   <meta name="twitter:description" content="Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.">
   <meta name="twitter:image" content="https://arcosonline.com.br/assets/hero-ecosystem.webp">
-  <link rel="stylesheet" href="../assets/styles.css?v=20260608-responsive-v1">
+  <link rel="stylesheet" href="../assets/styles.css?v=20260615-modal-api-v3">
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://arcosonline.com.br/#organization","name":"Arcos Online","url":"https://arcosonline.com.br","description":"Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.","email":"contato@arcosonline.com.br"},{"@type":"WebSite","@id":"https://arcosonline.com.br/#website","name":"Arcos Online","url":"https://arcosonline.com.br","inLanguage":"en","publisher":{"@id":"https://arcosonline.com.br/#organization"}},{"@type":"WebPage","@id":"https://arcosonline.com.br/en/#webpage","url":"https://arcosonline.com.br/en/","name":"Arcos Online clone scripts and white-label brokerage software","description":"Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.","inLanguage":"en","isPartOf":{"@id":"https://arcosonline.com.br/#website"},"about":{"@id":"https://arcosonline.com.br/#organization"}},{"@type":"FAQPage","@id":"https://arcosonline.com.br/en/#faq","mainEntity":[{"@type":"Question","name":"Is Arcos Online affiliated with the brokers mentioned?","acceptedAnswer":{"@type":"Answer","text":"No. The names are product references and market research signals. The final project must use its own brand, entity, domain, terms, assets and controls."}},{"@type":"Question","name":"Is the clone script ready to operate in any country?","acceptedAnswer":{"@type":"Answer","text":"Not automatically. Each operation must validate licensing, offering structure, KYC/AML, payments, commercial communication and jurisdiction rules."}},{"@type":"Question","name":"How long does launch take?","acceptedAnswer":{"@type":"Answer","text":"A closed-scope MVP can enter acceptance testing in a few weeks. Timing depends on PSPs, apps, integrations, compliance and customizations."}},{"@type":"Question","name":"Can the interface be customized?","acceptedAnswer":{"@type":"Answer","text":"Yes. The proposal is white-label: layout, colors, languages, assets, funnels, modules, permissions and integrations can be adapted to the operator."}},{"@type":"Question","name":"Do you deliver only front-end?","acceptedAnswer":{"@type":"Answer","text":"No. Arcos treats product, operations, payments, CRM and risk as one system. The depth of each module depends on the contracted scope."}},{"@type":"Question","name":"Can I start from a specific clone script?","acceptedAnswer":{"@type":"Answer","text":"Yes. The Deriv, IQ Option, Quotex, Pocket Option and other reference pages help choose the flow type, modules and launch priorities."}}]}]}</script>
 </head>
 <body>
@@ -308,32 +308,38 @@
     <div class="lead-modal-backdrop" data-lead-modal-close></div>
     <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="lead-modal-en-home-title" tabindex="-1">
       <button class="lead-modal-close" type="button" data-lead-modal-close aria-label="Close form">×</button>
-      <form class="lead-form" data-lead-form data-reference="Arcos Online" data-slug="home" novalidate>
+      <div class="lead-modal-head">
         <h2 id="lead-modal-en-home-title">Request compliance scoping</h2>
         <p class="lead-form-intro">Share your contact details, target jurisdictions, PSP needs, and platform scope. This is a project intake request, not legal, investment, or licensing advice.</p>
-        <div class="lead-form-grid">
-          <label>Name<input name="name" autocomplete="name" required placeholder="Your name"></label>
-          <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@company.com"></label>
-        </div>
-        <div class="phone-label">
-          <span class="lead-label-text">Phone</span>
-          <div class="phone-field" data-phone-field>
-            <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
-              <span data-phone-flag aria-hidden="true"></span>
-              <span data-phone-code></span>
-              <span class="phone-country-chevron" aria-hidden="true">⌄</span>
-            </button>
-            <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Phone number">
-            <input data-phone-normalized name="phone" type="hidden">
-            <input data-phone-country-value name="phone_country" type="hidden">
+      </div>
+      <form class="lead-form" data-lead-form data-reference="Arcos Online" data-slug="home" novalidate>
+        <div class="lead-form-body" data-lead-form-body>
+          <div class="lead-form-grid">
+            <label>Name<input name="name" autocomplete="name" required placeholder="Your name"></label>
+            <label>Email<input name="email" type="email" autocomplete="email" required placeholder="name@company.com"></label>
           </div>
-          <span class="phone-helper">Country is detected automatically, but users can change it before submitting.</span>
+          <div class="phone-label">
+            <span class="lead-label-text">Phone</span>
+            <div class="phone-field" data-phone-field>
+              <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+                <span data-phone-flag aria-hidden="true"></span>
+                <span data-phone-code></span>
+                <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+              </button>
+              <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="Phone number">
+              <input data-phone-normalized name="phone" type="hidden">
+              <input data-phone-country-value name="phone_country" type="hidden">
+            </div>
+            <span class="phone-helper">Country is detected automatically, but users can change it before submitting.</span>
+          </div>
+          <label>Company or current business<input name="company_name" autocomplete="organization" placeholder="Brokerage, affiliate team, fintech project..."></label>
+          <label>Project notes<textarea name="message" rows="4" placeholder="Target jurisdictions, licenses, PSPs, apps, CRM needs, compliance timeline..."></textarea></label>
+          <label class="consent"><input name="consent" type="checkbox" required><span>I agree to be contacted about brokerage platform setup and understand this is not legal, investment, or licensing advice.</span></label>
+          <p class="form-status" data-form-status aria-live="polite"></p>
         </div>
-        <label>Company or current business<input name="company_name" autocomplete="organization" placeholder="Brokerage, affiliate team, fintech project..."></label>
-        <label>Project notes<textarea name="message" rows="5" placeholder="Target jurisdictions, licenses, PSPs, apps, CRM needs, compliance timeline..."></textarea></label>
-        <label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted about brokerage platform setup and understand this is not legal, investment, or licensing advice.</label>
-        <button class="button primary" type="submit">Send scoping request</button>
-        <p class="form-status" data-form-status aria-live="polite"></p>
+        <div class="lead-form-actions">
+          <button class="button primary" type="submit"><span>Send scoping request</span></button>
+        </div>
       </form>
     </div>
   </div>
@@ -361,6 +367,6 @@
   </div>
   <div class="footer-bottom">© <span data-year></span> Arcos Online. Software and technical consulting for white-label platforms.</div>
 </footer>
-  <script src="../assets/site.js?v=20260608-responsive-v1"></script>
+  <script src="../assets/site.js?v=20260615-modal-api-v3"></script>
 </body>
 </html>

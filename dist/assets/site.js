@@ -6,7 +6,7 @@ const scrollProgress = document.querySelector("[data-scroll-progress]")
 const flightSections = [...document.querySelectorAll("[data-flight-section]")]
 const kineticHeroes = [...document.querySelectorAll("[data-kinetic-hero]")]
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
-const CRM_ENDPOINT = "https://group.quadcode.com/api/notPopup"
+const CRM_ENDPOINT = "/api/leads"
 const pageLang = document.documentElement.lang || "pt-BR"
 const isEnglish = pageLang.startsWith("en")
 const formCopy = isEnglish
@@ -357,13 +357,18 @@ function openLeadModal(shell) {
 
   shell.lastFocusedElement = document.activeElement
   panel.hidden = false
+  panel.scrollTop = 0
+  document.documentElement.classList.add("modal-open")
   document.body.classList.add("modal-open")
 
   requestAnimationFrame(() => {
     const dialog = panel.querySelector(".lead-modal-dialog")
+    const formBody = panel.querySelector("[data-lead-form-body]")
+
+    if (dialog) dialog.scrollTop = 0
+    if (formBody) formBody.scrollTop = 0
 
     if (dialog) {
-      dialog.scrollTop = 0
       dialog.focus({ preventScroll: true })
     } else {
       getModalFocusables(shell)[0]?.focus({ preventScroll: true })
@@ -379,6 +384,7 @@ function closeLeadModal(shell) {
   panel.hidden = true
 
   if (!document.querySelector("[data-lead-modal-panel]:not([hidden])")) {
+    document.documentElement.classList.remove("modal-open")
     document.body.classList.remove("modal-open")
   }
 
@@ -462,8 +468,8 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
       return
     }
 
-    const payload = new FormData()
     const pageUrl = window.location.href
+    const pagePath = window.location.pathname
     const searchParams = new URLSearchParams(window.location.search)
     const comment = [
       formCopy.lead,
@@ -482,32 +488,41 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
       .filter(Boolean)
       .join("\n")
 
-    payload.set("first_name", name)
-    payload.set("name", name)
-    payload.set("email", email)
-    payload.set("phone", phone)
-    payload.set("phone_country", phoneCountry)
-    payload.set("company_name", company)
-    payload.set("comment", comment)
-    payload.set("message", comment)
-    payload.set("terms_agree", "on")
-    payload.set("landing_url", pageUrl)
-    payload.set("page_url", pageUrl)
-    payload.set("referrer", document.referrer || "")
-    payload.set("lang_by_browser", navigator.language || pageLang)
-    payload.set("page_language", pageLang)
-    payload.set("source_site", "Arcos Online")
-    payload.set("source_form", "arcos_clone_script_quote")
-    payload.set("reference", reference)
-    payload.set("slug", slug)
+    const roistat = searchParams.get("roistat") || readCookie("roistat_visit")
+    const trackingPayload = {}
 
     ;["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"].forEach((key) => {
-      payload.set(key, searchParams.get(key) || "")
+      const value = searchParams.get(key)
+      if (value) trackingPayload[key] = value
     })
 
-    const roistat = searchParams.get("roistat") || readCookie("roistat_visit")
-    payload.set("roistat", roistat || "")
-    payload.set("roistat_id", roistat || "")
+    const payload = {
+      first_name: name,
+      name,
+      email,
+      phone,
+      phone_country: phoneCountry,
+      company_name: company,
+      comment,
+      message: comment,
+      terms_agree: true,
+      landing_url: pageUrl,
+      page_url: pageUrl,
+      page_path: pagePath,
+      source_url: pageUrl,
+      referrer: document.referrer || "",
+      lang_by_browser: navigator.language || pageLang,
+      page_language: pageLang,
+      source_site: "Arcos Online",
+      source_form: "arcos_clone_script_quote",
+      reference,
+      slug,
+      broker_name: reference,
+      broker_slug: slug,
+      roistat: roistat || "",
+      roistat_id: roistat || "",
+      ...trackingPayload,
+    }
 
     setStatus(status, formCopy.sending, "")
     if (button) button.disabled = true
@@ -515,12 +530,16 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
     try {
       const response = await fetch(CRM_ENDPOINT, {
         method: "POST",
-        body: payload,
-        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       })
 
-      if (!response.ok) {
-        throw new Error(`CRM returned ${response.status}`)
+      const result = await response.json().catch(() => null)
+
+      if (!response.ok || result?.success === false) {
+        throw new Error(result?.message || `CRM returned ${response.status}`)
       }
 
       form.reset()
@@ -529,7 +548,7 @@ document.querySelectorAll("[data-lead-form]").forEach((form) => {
       })
       setStatus(status, formCopy.success, "success")
     } catch (error) {
-      setStatus(status, formCopy.error, "error")
+      setStatus(status, error instanceof Error && error.message ? error.message : formCopy.error, "error")
     } finally {
       if (button) button.disabled = false
     }

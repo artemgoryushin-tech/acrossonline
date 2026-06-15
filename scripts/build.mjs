@@ -11,7 +11,7 @@ const site = {
     "Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.",
 }
 
-const assetVersion = "20260608-responsive-v1"
+const assetVersion = "20260615-modal-api-v3"
 
 const scripts = [
   clone("deriv", "Deriv", "opções, multipliers, CFDs e índices sintéticos", [
@@ -1470,32 +1470,38 @@ function renderLeadForm(reference, slug, locale = "pt") {
     <div class="lead-modal-backdrop" data-lead-modal-close></div>
     <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title" tabindex="-1">
       <button class="lead-modal-close" type="button" data-lead-modal-close aria-label="${copy.closeLabel}">×</button>
-      <form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
+      <div class="lead-modal-head">
         <h2 id="${modalId}-title">${copy.title}</h2>
         <p class="lead-form-intro">${copy.intro}</p>
-        <div class="lead-form-grid">
-          <label>${copy.name}<input name="name" autocomplete="name" required placeholder="${copy.namePlaceholder}"></label>
-          <label>Email<input name="email" type="email" autocomplete="email" required placeholder="${copy.emailPlaceholder}"></label>
-        </div>
-        <div class="phone-label">
-          <span class="lead-label-text">${copy.phone}</span>
-          <div class="phone-field" data-phone-field>
-            <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
-              <span data-phone-flag aria-hidden="true"></span>
-              <span data-phone-code></span>
-              <span class="phone-country-chevron" aria-hidden="true">⌄</span>
-            </button>
-            <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="${copy.phonePlaceholder}">
-            <input data-phone-normalized name="phone" type="hidden">
-            <input data-phone-country-value name="phone_country" type="hidden">
+      </div>
+      <form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
+        <div class="lead-form-body" data-lead-form-body>
+          <div class="lead-form-grid">
+            <label>${copy.name}<input name="name" autocomplete="name" required placeholder="${copy.namePlaceholder}"></label>
+            <label>Email<input name="email" type="email" autocomplete="email" required placeholder="${copy.emailPlaceholder}"></label>
           </div>
-          <span class="phone-helper">${copy.phoneHelper}</span>
+          <div class="phone-label">
+            <span class="lead-label-text">${copy.phone}</span>
+            <div class="phone-field" data-phone-field>
+              <button class="phone-country-button" type="button" data-phone-country-button aria-haspopup="listbox" aria-expanded="false">
+                <span data-phone-flag aria-hidden="true"></span>
+                <span data-phone-code></span>
+                <span class="phone-country-chevron" aria-hidden="true">⌄</span>
+              </button>
+              <input class="phone-input" data-phone-input name="phone_input" type="tel" inputmode="tel" autocomplete="tel-national" required placeholder="${copy.phonePlaceholder}">
+              <input data-phone-normalized name="phone" type="hidden">
+              <input data-phone-country-value name="phone_country" type="hidden">
+            </div>
+            <span class="phone-helper">${copy.phoneHelper}</span>
+          </div>
+          <label>${copy.company}<input name="company_name" autocomplete="organization" placeholder="${copy.companyPlaceholder}"></label>
+          <label>${copy.project}<textarea name="message" rows="4" placeholder="${copy.projectPlaceholder}"></textarea></label>
+          <label class="consent"><input name="consent" type="checkbox" required><span>${copy.consent}</span></label>
+          <p class="form-status" data-form-status aria-live="polite"></p>
         </div>
-        <label>${copy.company}<input name="company_name" autocomplete="organization" placeholder="${copy.companyPlaceholder}"></label>
-        <label>${copy.project}<textarea name="message" rows="5" placeholder="${copy.projectPlaceholder}"></textarea></label>
-        <label class="consent"><input name="consent" type="checkbox" required> ${copy.consent}</label>
-        <button class="button primary" type="submit">${copy.submit}</button>
-        <p class="form-status" data-form-status aria-live="polite"></p>
+        <div class="lead-form-actions">
+          <button class="button primary" type="submit"><span>${copy.submit}</span></button>
+        </div>
       </form>
     </div>
   </div>
