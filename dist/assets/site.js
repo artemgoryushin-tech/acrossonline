@@ -344,18 +344,45 @@ if (revealNodes.length > 0) {
   }
 }
 
-function getModalFocusables(shell) {
-  return [...shell.querySelectorAll('a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])')].filter(
+function getLeadModalPanel(shell) {
+  if (shell.leadModalPanel?.isConnected) return shell.leadModalPanel
+
+  const panel = shell.querySelector("[data-lead-modal-panel]")
+  if (panel) shell.leadModalPanel = panel
+  return panel
+}
+
+function mountLeadModal(shell, panel) {
+  if (!panel || panel.parentElement === document.body) return
+
+  if (!shell.leadModalPlaceholder) {
+    shell.leadModalPlaceholder = document.createComment("lead-modal-mount")
+    panel.parentNode?.insertBefore(shell.leadModalPlaceholder, panel)
+  }
+
+  document.body.append(panel)
+}
+
+function restoreLeadModal(shell, panel) {
+  if (!panel || !shell.leadModalPlaceholder?.parentNode) return
+
+  shell.leadModalPlaceholder.replaceWith(panel)
+  shell.leadModalPlaceholder = null
+}
+
+function getModalFocusables(container) {
+  return [...container.querySelectorAll('a[href], button, input, textarea, select, [tabindex]:not([tabindex="-1"])')].filter(
     (element) => !element.disabled && element.offsetParent !== null,
   )
 }
 
 function openLeadModal(shell) {
-  const panel = shell.querySelector("[data-lead-modal-panel]")
+  const panel = getLeadModalPanel(shell)
 
   if (!panel) return
 
   shell.lastFocusedElement = document.activeElement
+  mountLeadModal(shell, panel)
   panel.hidden = false
   panel.scrollTop = 0
   document.documentElement.classList.add("modal-open")
@@ -371,17 +398,18 @@ function openLeadModal(shell) {
     if (dialog) {
       dialog.focus({ preventScroll: true })
     } else {
-      getModalFocusables(shell)[0]?.focus({ preventScroll: true })
+      getModalFocusables(panel)[0]?.focus({ preventScroll: true })
     }
   })
 }
 
 function closeLeadModal(shell) {
-  const panel = shell.querySelector("[data-lead-modal-panel]")
+  const panel = getLeadModalPanel(shell)
 
   if (!panel || panel.hidden) return
 
   panel.hidden = true
+  restoreLeadModal(shell, panel)
 
   if (!document.querySelector("[data-lead-modal-panel]:not([hidden])")) {
     document.documentElement.classList.remove("modal-open")
@@ -392,12 +420,14 @@ function closeLeadModal(shell) {
 }
 
 document.querySelectorAll("[data-lead-modal]").forEach((shell) => {
+  const panel = getLeadModalPanel(shell)
+
   shell.querySelector("[data-lead-modal-open]")?.addEventListener("click", () => openLeadModal(shell))
   shell.querySelectorAll("[data-lead-modal-close]").forEach((button) => {
     button.addEventListener("click", () => closeLeadModal(shell))
   })
 
-  shell.querySelector("[data-lead-modal-panel]")?.addEventListener("keydown", (event) => {
+  panel?.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeLeadModal(shell)
       return
@@ -405,13 +435,13 @@ document.querySelectorAll("[data-lead-modal]").forEach((shell) => {
 
     if (event.key !== "Tab") return
 
-    const focusables = getModalFocusables(shell)
+    const focusables = getModalFocusables(panel)
     const first = focusables[0]
     const last = focusables[focusables.length - 1]
 
     if (!first || !last) return
 
-    const dialog = shell.querySelector(".lead-modal-dialog")
+    const dialog = panel.querySelector(".lead-modal-dialog")
 
     if (document.activeElement === dialog) {
       event.preventDefault()
@@ -426,6 +456,17 @@ document.querySelectorAll("[data-lead-modal]").forEach((shell) => {
       event.preventDefault()
       first.focus()
     }
+  })
+})
+
+document.querySelectorAll("[data-lead-modal-trigger]").forEach((trigger) => {
+  trigger.addEventListener("click", (event) => {
+    const shell = document.querySelector("[data-lead-modal]")
+
+    if (!shell) return
+
+    event.preventDefault()
+    openLeadModal(shell)
   })
 })
 

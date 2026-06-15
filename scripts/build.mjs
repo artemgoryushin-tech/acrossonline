@@ -11,7 +11,7 @@ const site = {
     "Clone scripts and white-label brokerage software for launching trading platforms with traderoom, CRM, payments, KYC/AML, apps, antifraud, affiliates and reporting.",
 }
 
-const assetVersion = "20260615-modal-api-v3"
+const assetVersion = "20260615-briefing-modal-v1"
 
 const scripts = [
   clone("deriv", "Deriv", "opções, multipliers, CFDs e índices sintéticos", [
@@ -673,7 +673,7 @@ function renderHeader(pathName, locale = "pt") {
         <a class="${locale === "pt" ? "is-active" : ""}" href="${hrefForPath(pathName, toPtPath(pathName))}" hreflang="pt-BR">PT</a>
         <a class="${locale === "en" ? "is-active" : ""}" href="${hrefForPath(pathName, toEnPath(pathName))}" hreflang="en">EN</a>
       </div>
-      <a class="nav-cta" href="${hrefForPath(pathName, homePath)}#contato">${labels.briefing}</a>
+      <a class="nav-cta" href="${hrefForPath(pathName, homePath)}#contato" data-lead-modal-trigger>${labels.briefing}</a>
     </nav>
   </div>
 </header>`
