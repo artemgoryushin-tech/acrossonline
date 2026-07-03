@@ -1,4 +1,4 @@
-import { copyFile, mkdir, rm, writeFile } from "node:fs/promises"
+import { copyFile, cp, mkdir, rm, writeFile } from "node:fs/promises"
 import path from "node:path"
 
 const site = {
@@ -134,6 +134,15 @@ const scriptsEn = scripts.map((script) => ({
   market: scriptTranslations[script.slug].market,
   angles: scriptTranslations[script.slug].angles,
 }))
+
+const standaloneComparisonDirs = [
+  "quotex-affiliate-program-vs-white-label",
+  "pocket-option-affiliate-program-vs-white-label",
+  "binomo-affiliate-program-vs-white-label",
+  "iq-option-affiliate-program-vs-white-label",
+  "olymp-trade-affiliate-program-vs-white-label",
+  "deriv-affiliate-program-vs-white-label",
+]
 
 const systemLayers = [
   {
@@ -593,6 +602,11 @@ await copyFile(path.join(process.cwd(), "assets", "arcos-phase-brand-foundation.
 await copyFile(path.join(process.cwd(), "assets", "arcos-phase-operations.webp"), path.join(outDir, "assets", "arcos-phase-operations.webp"))
 await copyFile(path.join(process.cwd(), "assets", "arcos-phase-market-scale.webp"), path.join(outDir, "assets", "arcos-phase-market-scale.webp"))
 
+for (const dirName of standaloneComparisonDirs) {
+  await cp(path.join(process.cwd(), dirName), path.join(outDir, dirName), { recursive: true })
+  await cp(path.join(process.cwd(), dirName), path.join(outDir, "en", dirName), { recursive: true })
+}
+
 function clone(slug, name, market, angles) {
   return {
     slug,
@@ -673,7 +687,7 @@ function renderHeader(pathName, locale = "pt") {
         <a class="${locale === "pt" ? "is-active" : ""}" href="${hrefForPath(pathName, toPtPath(pathName))}" hreflang="pt-BR">PT</a>
         <a class="${locale === "en" ? "is-active" : ""}" href="${hrefForPath(pathName, toEnPath(pathName))}" hreflang="en">EN</a>
       </div>
-      <a class="nav-cta" href="${hrefForPath(pathName, homePath)}#contato" data-lead-modal-trigger>${labels.briefing}</a>
+      <a class="nav-cta" href="${hrefForPath(pathName, homePath)}#contato">${labels.briefing}</a>
     </nav>
   </div>
 </header>`
@@ -1413,7 +1427,6 @@ function cloneFaqs(script, locale = "pt") {
 
 function renderLeadForm(reference, slug, locale = "pt") {
   const isEn = locale === "en"
-  const modalId = `lead-modal-${locale}-${slug.replace(/[^a-z0-9-]/gi, "-")}`
   const copy = isEn
     ? {
         title: "Request compliance scoping",
@@ -1460,21 +1473,13 @@ function renderLeadForm(reference, slug, locale = "pt") {
         submit: "Enviar escopo",
       }
 
-  return `<div class="lead-modal-shell" data-lead-modal>
-  <article class="lead-cta-card">
+  return `<div class="lead-inline-shell">
+  <article class="lead-cta-card lead-inline-card">
+    <div class="lead-inline-head">
     <h3>${copy.ctaTitle}</h3>
-    <p>${copy.ctaText}</p>
-    <button class="button primary lead-modal-open" type="button" data-lead-modal-open>${copy.ctaButton}</button>
-  </article>
-  <div class="lead-modal" data-lead-modal-panel hidden>
-    <div class="lead-modal-backdrop" data-lead-modal-close></div>
-    <div class="lead-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="${modalId}-title" tabindex="-1">
-      <button class="lead-modal-close" type="button" data-lead-modal-close aria-label="${copy.closeLabel}">×</button>
-      <div class="lead-modal-head">
-        <h2 id="${modalId}-title">${copy.title}</h2>
-        <p class="lead-form-intro">${copy.intro}</p>
-      </div>
-      <form class="lead-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
+    <p>${copy.intro}</p>
+    </div>
+      <form class="lead-form lead-inline-form" data-lead-form data-reference="${escapeHtml(reference)}" data-slug="${escapeHtml(slug)}" novalidate>
         <div class="lead-form-body" data-lead-form-body>
           <div class="lead-form-grid">
             <label>${copy.name}<input name="name" autocomplete="name" required placeholder="${copy.namePlaceholder}"></label>
@@ -1503,8 +1508,7 @@ function renderLeadForm(reference, slug, locale = "pt") {
           <button class="button primary" type="submit"><span>${copy.submit}</span></button>
         </div>
       </form>
-    </div>
-  </div>
+  </article>
 </div>`
 }
 
@@ -1676,6 +1680,7 @@ function renderSitemap() {
     "/en/",
     ...scripts.map((script) => `/clone-scripts/${script.slug}/`),
     ...scripts.map((script) => `/en/clone-scripts/${script.slug}/`),
+    ...standaloneComparisonDirs.map((dirName) => `/en/${dirName}/`),
   ]
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

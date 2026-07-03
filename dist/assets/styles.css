@@ -1222,6 +1222,10 @@ details p {
   width: 100%;
 }
 
+.lead-inline-shell {
+  width: 100%;
+}
+
 .lead-cta-card {
   display: grid;
   gap: 16px;
@@ -1249,6 +1253,40 @@ details p {
 
 .lead-cta-card .button {
   width: fit-content;
+}
+
+.lead-inline-card {
+  gap: 18px;
+}
+
+.lead-inline-head {
+  display: grid;
+  gap: 10px;
+}
+
+.lead-inline-form {
+  grid-template-rows: auto;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.lead-inline-form .lead-form-body {
+  gap: 11px;
+  overflow: visible;
+  padding: 0;
+}
+
+.lead-inline-form .lead-form-actions {
+  border-top: 0;
+  background: transparent;
+  padding: 14px 0 0;
+}
+
+.lead-inline-form .lead-form-actions .button {
+  width: 100%;
 }
 
 .lead-modal[hidden] {
